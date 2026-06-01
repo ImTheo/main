@@ -1,32 +1,32 @@
 # Multiple File Column Mappings
 
-Script CLI para actualizar valores en un archivo Excel `.xlsx` usando otro archivo `.xlsx` como matriz de consulta.
+CLI script to update values in an Excel `.xlsx` file using another `.xlsx` file as a lookup matrix.
 
-El script usa automáticamente la primera hoja de cada archivo y no usa `pandas`.
+The script automatically uses the first sheet in each file and does not use `pandas`.
 
-## Requisitos
+## Requirements
 
-- Python 3.8 o superior.
-- `pip` para instalar dependencias.
-- Archivos de entrada en formato `.xlsx`.
+- Python 3.8 or higher.
+- `pip` to install dependencies.
+- Input files in `.xlsx` format.
 
-Para verificar la versión de Python:
+To check your Python version:
 
 ```bash
 python3 --version
 ```
 
-En Windows:
+On Windows:
 
 ```powershell
 python --version
 ```
 
-La dependencia externa del proyecto es `openpyxl`, instalada desde `requirements.txt`.
+The project's external dependency is `openpyxl`, installed from `requirements.txt`.
 
-## Instalación
+## Installation
 
-Desde esta carpeta:
+From this folder:
 
 ```bash
 python3 -m venv venv
@@ -34,7 +34,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-En Windows PowerShell:
+On Windows PowerShell:
 
 ```powershell
 python -m venv venv
@@ -42,9 +42,9 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-Si `python3` no existe en tu sistema, usa `python` en los comandos.
+If `python3` is not available on your system, use `python` in the commands.
 
-## Uso
+## Usage
 
 ```bash
 python replace_from_lookup.py \
@@ -58,24 +58,24 @@ python replace_from_lookup.py \
   --lookup-value-column "Nuevo Estado"
 ```
 
-Todos los argumentos son obligatorios:
+All arguments are required:
 
-- `--dynamic-file`: archivo `.xlsx` que será actualizado.
-- `--lookup-file`: archivo `.xlsx` usado como matriz de consulta.
-- `--dynamic-header-row`: fila de encabezados en el archivo dynamic.
-- `--lookup-header-row`: fila de encabezados en el archivo lookup.
-- `--dynamic-match-column`: columna usada para buscar coincidencias en dynamic.
-- `--dynamic-replace-column`: columna que se actualizará en dynamic.
-- `--lookup-match-column`: columna usada para buscar coincidencias en lookup.
-- `--lookup-value-column`: columna desde donde se toma el nuevo valor.
+- `--dynamic-file`: `.xlsx` file that will be updated.
+- `--lookup-file`: `.xlsx` file used as the lookup matrix.
+- `--dynamic-header-row`: header row in the dynamic file.
+- `--lookup-header-row`: header row in the lookup file.
+- `--dynamic-match-column`: column used to find matches in the dynamic file.
+- `--dynamic-replace-column`: column that will be updated in the dynamic file.
+- `--lookup-match-column`: column used to find matches in the lookup file.
+- `--lookup-value-column`: column that provides the new value.
 
-Argumentos opcionales:
+Optional arguments:
 
-- `--print-duplicated-lookup-keys`: imprime las claves duplicadas del lookup que tambien existen en dynamic, ya normalizadas.
+- `--print-duplicated-lookup-keys`: prints normalized duplicated lookup keys that also exist in the dynamic file.
 
-## Columnas
+## Columns
 
-Las columnas pueden indicarse de tres formas:
+Columns can be provided in three ways:
 
 ```bash
 --dynamic-match-column "Código Proceso"
@@ -83,28 +83,28 @@ Las columnas pueden indicarse de tres formas:
 --dynamic-match-column 1
 ```
 
-Cuando se usa un nombre de encabezado, la comparación ignora mayúsculas/minúsculas y espacios al inicio o al final.
+When a header name is used, matching ignores letter case and leading or trailing spaces.
 
-## Normalización de claves
+## Key Normalization
 
-La normalización se aplica solo a las columnas de coincidencia:
+Normalization is applied only to the match columns:
 
 - `--dynamic-match-column`
 - `--lookup-match-column`
 
-Reglas:
+Rules:
 
-- Valores vacíos se convierten en string vacío.
-- El valor se convierte a texto.
-- Se eliminan comillas dobles.
-- Se eliminan espacios al inicio y al final.
-- Si termina en `.0`, se convierte a entero textual.
-- Se toma solo la primera palabra.
-- Se convierte a minúsculas.
+- Empty values become an empty string.
+- The value is converted to text.
+- Double quotes are removed.
+- Leading and trailing spaces are removed.
+- If the value ends in `.0`, it is converted to text without the decimal part.
+- Only the first word is used.
+- The value is converted to lowercase.
 
-Ejemplos:
+Examples:
 
-| Valor original | Clave normalizada |
+| Original value | Normalized key |
 | --- | --- |
 | `"ABC123 contrato energia"` | `abc123` |
 | `ABC123 contrato energia` | `abc123` |
@@ -112,29 +112,29 @@ Ejemplos:
 | `ABC123` | `abc123` |
 | `123.0` | `123` |
 
-El valor escrito en `--dynamic-replace-column` no se normaliza: se copia exactamente desde `--lookup-value-column`.
+The value written to `--dynamic-replace-column` is not normalized: it is copied exactly from `--lookup-value-column`.
 
-Las filas del archivo dynamic con clave no vacía pero sin coincidencia en el lookup se marcan en amarillo en el archivo de salida.
+Rows in the dynamic file with a non-empty key but no match in the lookup file are highlighted in yellow in the output file.
 
-## Salida
+## Output
 
-El archivo original no se sobrescribe. Se genera un archivo nuevo junto al archivo dynamic:
+The original file is not overwritten. A new file is generated next to the dynamic file:
 
 ```text
 dynamic_matrix.xlsx -> dynamic_matrix_updated.xlsx
 ```
 
-Si el archivo `_updated.xlsx` ya existe, se sobrescribe.
+If the `_updated.xlsx` file already exists, it is overwritten.
 
-## Duplicados
+## Duplicates
 
-Si el lookup contiene claves duplicadas, se usa el último valor encontrado y se muestra una advertencia:
+If the lookup file contains duplicated keys, the last value found is used and a warning is shown:
 
 ```text
 Warning: 4 duplicated lookup keys found. Last value was used.
 ```
 
-Para ver cuales claves duplicadas del lookup tienen coincidencia en dynamic:
+To see which duplicated lookup keys also have a match in the dynamic file:
 
 ```bash
 python replace_from_lookup.py \
@@ -149,7 +149,7 @@ python replace_from_lookup.py \
   --print-duplicated-lookup-keys
 ```
 
-Salida adicional:
+Additional output:
 
 ```text
 Duplicated lookup keys matching dynamic file:
@@ -157,7 +157,7 @@ Duplicated lookup keys matching dynamic file:
 - xyz789
 ```
 
-## Ejemplo completo
+## Complete Example
 
 ```bash
 python replace_from_lookup.py \
@@ -171,13 +171,13 @@ python replace_from_lookup.py \
   --lookup-value-column "Nuevo Estado"
 ```
 
-Resultado:
+Result:
 
 ```text
 matriz_dinamica_updated.xlsx
 ```
 
-Resumen esperado:
+Expected summary:
 
 ```text
 Processed rows: 300
@@ -188,13 +188,13 @@ Duplicated lookup keys: 3
 Output file: matriz_dinamica_updated.xlsx
 ```
 
-## Formatos soportados
+## Supported Formats
 
-Solo se aceptan archivos `.xlsx`.
+Only `.xlsx` files are accepted.
 
-No se aceptan `.xls`, `.xlsm`, `.csv` ni `.ods`.
+`.xls`, `.xlsm`, `.csv`, and `.ods` files are not accepted.
 
-Si se usa otro formato, el script se detiene con un error:
+If another format is used, the script stops with an error:
 
 ```text
 Error: Only .xlsx files are supported: data.csv
