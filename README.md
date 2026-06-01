@@ -4,6 +4,26 @@ Script CLI para actualizar valores en un archivo Excel `.xlsx` usando otro archi
 
 El script usa automáticamente la primera hoja de cada archivo y no usa `pandas`.
 
+## Requisitos
+
+- Python 3.8 o superior.
+- `pip` para instalar dependencias.
+- Archivos de entrada en formato `.xlsx`.
+
+Para verificar la versión de Python:
+
+```bash
+python3 --version
+```
+
+En Windows:
+
+```powershell
+python --version
+```
+
+La dependencia externa del proyecto es `openpyxl`, instalada desde `requirements.txt`.
+
 ## Instalación
 
 Desde esta carpeta:
@@ -21,6 +41,8 @@ python -m venv venv
 .\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
+
+Si `python3` no existe en tu sistema, usa `python` en los comandos.
 
 ## Uso
 
