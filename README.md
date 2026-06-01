@@ -128,10 +128,25 @@ If the `_updated.xlsx` file already exists, it is overwritten.
 
 ## Duplicates
 
-If the lookup file contains duplicated keys, the last value found is used and a warning is shown:
+If the lookup file contains duplicated keys, all values found for that key are written to the dynamic file separated by commas.
+
+For example, if the lookup file has:
 
 ```text
-Warning: 4 duplicated lookup keys found. Last value was used.
+abc123 -> Pending
+abc123 -> Completed
+```
+
+The dynamic file receives:
+
+```text
+Pending, Completed
+```
+
+A warning is also shown:
+
+```text
+Warning: 4 duplicated lookup keys found. Values were joined with commas.
 ```
 
 To see which duplicated lookup keys also have a match in the dynamic file:

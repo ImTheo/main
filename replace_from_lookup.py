@@ -117,8 +117,14 @@ def load_xlsx(path):
         fail(f"Could not open workbook: {path}")
 
 
+def combine_lookup_values(values):
+    if len(values) == 1:
+        return values[0]
+    return ", ".join("" if value is None else str(value) for value in values)
+
+
 def build_lookup_map(ws, header_row, match_col, value_col):
-    lookup = {}
+    lookup_values = {}
     seen_keys = set()
     duplicated_keys = set()
     duplicated_count = 0
@@ -132,8 +138,12 @@ def build_lookup_map(ws, header_row, match_col, value_col):
             duplicated_count += 1
             duplicated_keys.add(key)
         seen_keys.add(key)
-        lookup[key] = ws.cell(row=row, column=value_col).value
+        lookup_values.setdefault(key, []).append(ws.cell(row=row, column=value_col).value)
 
+    lookup = {
+        key: combine_lookup_values(values)
+        for key, values in lookup_values.items()
+    }
     return lookup, duplicated_count, sorted(duplicated_keys)
 
 
@@ -243,6 +253,9 @@ def main():
     dynamic_wb.save(output_file)
 
     if duplicated_count:
+        print(
+            f"Warning: {duplicated_count} duplicated lookup keys found. Values were joined with commas."
+        )
         if args.print_duplicated_lookup_keys:
             matching_duplicated_keys = [
                 key for key in duplicated_keys if key in dynamic_keys
