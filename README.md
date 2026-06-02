@@ -46,6 +46,31 @@ If `python3` is not available on your system, use `python` in the commands.
 
 ## Usage
 
+### Graphical Interface (recommended for non-technical users)
+
+A Tkinter-based GUI is available for users who prefer not to use the command line.
+
+To launch it:
+
+```powershell
+python app_gui.py
+```
+
+The interface allows you to:
+
+- Select the dynamic and lookup `.xlsx` files using a file browser.
+- Configure header rows and column names without typing commands.
+- Run the process with a single click.
+- See a summary of processed, updated, and unmatched rows directly in the window.
+
+All fields come pre-filled with default values. Most users only need to select their files and click **Run process**.
+
+Rows without a match are highlighted in yellow in the output file, just like the CLI version.
+
+---
+
+### Command Line Interface (CLI)
+
 ```bash
 python replace_from_lookup.py \
   --dynamic-file dynamic_matrix.xlsx \
